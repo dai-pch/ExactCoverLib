@@ -234,6 +234,7 @@ int Head::_CreatColumnHead()
 	return col;
 }
 
+/*
 int SolveExactCover(Head &head, std::vector<int> &res)
 {
 	HeadofColumn *columnHead = nullptr;
@@ -284,8 +285,10 @@ int SolveExactCover(Head &head, std::vector<int> &res)
 
 	return 0;
 }
+*/
 
 //find the column that contain minimal node
+/*
 int FindMinColumn(Head &head, HeadofColumn* &minHead)
 {
 	Node *node;
@@ -308,4 +311,78 @@ int FindMinColumn(Head &head, HeadofColumn* &minHead)
 	}
 	return (static_cast<HeadofColumn*>(minHead))->GetUnitNumber();
 }
+*/
 
+int Head::_FindMinColumn(HeadofColumn* &minHead)
+{
+	Node *node;
+	int temp;
+
+	//if there is no column head, return -1
+	node = &(this->GetRightNode());
+	if (node == this)
+		return -1;
+
+	minHead = static_cast<HeadofColumn*>(node);
+	while (node != this)
+	{
+		temp = (static_cast<HeadofColumn*>(node))->GetUnitNumber();
+		if (temp < (static_cast<HeadofColumn*>(minHead))->GetUnitNumber())
+		{
+			minHead = static_cast<HeadofColumn*>(node);
+		}
+		node = &(node->GetRightNode());
+	}
+	return (static_cast<HeadofColumn*>(minHead))->GetUnitNumber();
+}
+
+int Head::solve(std::vector<int> &res)
+{
+	HeadofColumn *columnHead = nullptr;
+	Unit *unit;
+	int minunit, temp;
+
+	if (&(this->GetRightNode()) == this)
+	{
+#ifdef _DEBUG_MODE
+		std::cout << "Success." << std::endl;
+#endif
+		return 1;
+	}
+
+
+	minunit = this->_FindMinColumn(columnHead);
+	if (minunit == 0)
+	{
+#ifdef _DEBUG_MODE
+		std::cout << "Column " << columnHead->GetColumnName() << " have no unit." << std::endl;
+#endif
+		return 0;
+	}
+
+	//begin to solve
+	unit = static_cast<Unit*>(&(columnHead->GetDownNode()));
+	while (unit != dynamic_cast<Node*> (columnHead))
+	{
+		unit->SelectRow();
+		temp = this->solve(res);
+		unit->UnSelectRow();
+
+		if (temp == 1)
+		{
+			res.push_back(unit->GetRowNumber());
+
+			//debug
+#ifdef _DEBUG_MODE
+			std::cout << "Success, return vector: ";
+			PrintVector(res);
+#endif
+
+			return 1;
+		}
+		else if (temp == 0)
+			unit = static_cast<Unit*>(&(unit->GetDownNode()));
+	}
+
+	return 0;
+}

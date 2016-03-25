@@ -3,7 +3,26 @@
 
 #include <vector>
 
-class Head;
+#ifndef DeclareInterface
+#define DeclareInterface(name) class name { \
+public: \
+	virtual ~name() {}
+#endif
+
+#ifndef DeclareBasedInterface
+#define DeclareBasedInterface(name, base) class name : \
+public base{ \
+public: \
+	virtual ~name() {}
+#endif
+
+#ifndef EndInterface
+#define EndInterface };
+#endif
+
+#ifndef implements
+#define implements public
+#endif
 
 class nonZeroPosition
 {
@@ -13,10 +32,14 @@ public:
 	bool operator < (const nonZeroPosition& element2);
 };
 
-class ExactCover
+DeclareInterface(iExactCover)
+virtual int solve(std::vector<int> &res)=0;
+EndInterface
+
+class ExactCover:implements iExactCover
 {
 private:
-	Head* ptr_head;
+	iExactCover* ptr_iExactCover;
 public:
 	ExactCover(const int matrix[], int m, int n);
 	ExactCover(const std::vector<int> &matric, int m, int n);

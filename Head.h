@@ -1,7 +1,7 @@
 #ifndef HEAD_H
 #define HEAD_H
 
-class Head :public Node
+class Head :public Node, implements iExactCover
 {
 private:
 	int __totalColumn;
@@ -11,6 +11,8 @@ private:
 	//creat Unit object and add it into link, (column, row) are its position, return 0
 	int _CreatUnit(int row, int column);
 
+	int _FindMinColumn(HeadofColumn* &minHead);
+
 public:
 //	Head();
 	Head(const int matrix[],int m, int n);
@@ -18,8 +20,10 @@ public:
 	Head(std::vector<nonZeroPosition> &matric, int m, int n);
 	~Head();
 
-	friend int SolveExactCover(Head &head, std::vector<int> &res);
-	friend int FindMinColumn(Head &head, HeadofColumn* &minHead);
+	int solve(std::vector<int> &res);
+
+//	friend int SolveExactCover(Head &head, std::vector<int> &res);
+//	friend int FindMinColumn(Head &head, HeadofColumn* &minHead);
 };
 
 #endif

@@ -7,25 +7,25 @@ bool nonZeroPosition::operator < (const nonZeroPosition& element2)
 
 ExactCover::ExactCover(const int matrix[], int m, int n) 
 {
-	ptr_head = new Head(matrix, m, n);
+	ptr_iExactCover = new Head(matrix, m, n);
 }
 
 ExactCover::ExactCover(const std::vector<int> &matric, int m, int n)
 {
-	ptr_head = new Head(matric, m, n);
+	ptr_iExactCover = new Head(matric, m, n);
 }
 
 ExactCover::ExactCover(std::vector<nonZeroPosition> &matric, int m, int n)
 {
-	ptr_head = new Head(matric, m, n);
+	ptr_iExactCover = new Head(matric, m, n);
 }
 
 ExactCover::~ExactCover()
 {
-	delete ptr_head;
+	delete ptr_iExactCover;
 }
 
 int ExactCover::solve(std::vector<int> &res)
 {
-	return SolveExactCover(*ptr_head, res);
+	return ptr_iExactCover->solve(res);
 }
